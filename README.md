@@ -60,32 +60,81 @@ python predict_crush_interest.py
 The model is trained using the Logistic Regression algorithm from the `scikit-learn` library. Here is a snippet of the training process:
 
 ```python
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+import numpy as np
+import pandas as pd
+
+# to build linear model
+from sklearn.linear_model import LinearRegression
+
+# load dataset
+data = pd.read_csv('dataset.csv')
+data
+
+# prompt: Using dataframe data: train as logical regression indepened var 'Late_to_reply', 'ignore_you', 'smile_when_you_smile','eye_contact_loss','ignore_your_speech'] depend variale interest_in
+
+import pandas as pd
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
 
-# Load and preprocess the data
-df = pd.read_csv("dataset.csv")
-X = df[['Late_to_reply', 'ignore_you', 'smile_when_you_smile', 'eye_contact_loss', 'ignore_your_speech']]
-y = df['interest_in']
+# Load the data
+data = pd.read_csv('dataset.csv')
 
-# Split the data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Define the independent and dependent variables
+X = data[['Late_to_reply', 'ignore_you', 'smile_when_you_smile', 'eye_contact_loss', 'ignore_your_speech']]
+y = data['interest_in']
 
-# Scale the features
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
-
-# Train the model
+# Train the logistic regression model
 model = LogisticRegression()
-model.fit(X_train_scaled, y_train)
+model.fit(X, y)
+
+# Make predictions
+predictions = model.predict(X)
 
 # Evaluate the model
-y_pred = model.predict(X_test_scaled)
-accuracy = accuracy_score(y_test, y_pred)
-print(f"Model Accuracy: {accuracy:.2f}")
+
+# prompt: get accuraccy
+
+from sklearn.metrics import accuracy_score
+accuracy = accuracy_score(y, predictions)
+print(accuracy)
+
+# prompt: get prediction
+
+# make prediction
+prediction = model.predict([[0, 0, 0, 1, 0]])
+print(prediction)
+
+# prompt: train the model
+
+# Train the logistic regression model
+model = LogisticRegression()
+model.fit(X, y)
+
+# prompt: save the model
+
+import pickle
+
+# Save the model to a file
+with open('model.pkl', 'wb') as f:
+  pickle.dump(model, f)
+
+
+
+# prompt: use model.pkl
+import pickle
+X = data[['Late_to_reply', 'ignore_you', 'smile_when_you_smile', 'eye_contact_loss', 'ignore_your_speech']]
+# Load the model from the file
+with open('model.pkl', 'rb') as f:
+  model = pickle.load(f)
+
+# Make predictions
+predictions = model.predict(X)
+
+# Evaluate the model
+
+# make prediction
+prediction = model.predict([[0, 0, 1, 1, 0]])
+print(prediction)
+
 ```
 
 ## Evaluation
