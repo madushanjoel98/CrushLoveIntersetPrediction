@@ -1,5 +1,3 @@
-Here's an example of a README file for a GitHub repository titled "ML Model to Predict Your Crush's Interest":
-
 ---
 
 # Crush Interest Prediction
